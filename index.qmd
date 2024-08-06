@@ -1,0 +1,509 @@
+---
+title: "In-house package development in R"
+author: Camille Seaberry
+institute: DataHaven & UMBC
+format: 
+    revealjs: 
+        theme: [default, custom.scss]
+        navigation-mode: vertical
+        section-divs: true
+        menu: true
+        incremental: true
+        html-table-processing: none
+        center: false
+        margin: 0.05
+        code-overflow: wrap
+        controls: true
+        controls-layout: bottom-right
+title-slide-attributes: 
+    data-background-image: images/delta.jpg
+    data-background-size: cover
+    data-background-opacity: "0.1"
+highlight-style: a11y
+execute: 
+    echo: false
+    message: false
+    warning: false
+fig-responsive: true
+fig-cap-location: top
+engine: knitr
+knitr: 
+  opts_knit:
+    fig.showtext: true 
+filters: 
+    - qrcode
+    - iconify
+---
+
+# {{< iconify fluent hand-wave-24-regular >}} Intro {data-name="Intro"}
+
+
+## Quick note
+
+For the sake of time, consider this a choose-your-own-adventure presentation, with 2 main paths:
+
+* Option 1 is a high-level overview of why you might want to develop a package
+* Option 2 is a more code-oriented walkthrough of what you can do with a package
+
+
+## About me {.incremental}
+
+* 9ish years working with public data at or with nonprofits focused on demographics, public health, community needs & assets
+* Very excited about useful data and good code 
+* Extremely disorganized... except in my code 
+* Hate rewriting / copying & pasting code, hardcoding anything
+* Work remotely
+
+. . .
+
+Those last 3 necessitated building tools, eventually packages for myself & colleagues
+
+
+# {{< iconify fluent box-24-regular >}} Packages 
+
+
+## What is a package?
+
+* Different terms in different languages (package, library, module, etc)
+* Generally a collection of code for some specific purpose
+* In R, usually distributed open source & free of charge
+    - Often start from individual needs, shared with community
+    - Grow to form ecosystems of shared techniques, data types, frameworks
+
+
+## Example: Packages in a recent small project {.smaller}
+
+```{r}
+#| label: setup
+library(dplyr)
+library(ggplot2)
+library(tidygraph)
+library(ggraph)
+library(showtext)
+
+# showtext_auto()
+# showtext_opts(dpi = 75)
+sysfonts::font_add_google("Source Sans 3")
+
+pal_mtx <- stylehaven::palx("#db4dd4", n_hues = 10, n_shades = 5, plot = FALSE)
+pal <- pal_mtx$shade03[c("gray", "fuschia", "blue", "orange", "green")]
+theme_src <- function() {
+    ggplot2::theme_minimal(base_family = "Source Sans 3", base_size = 24)
+}
+theme_set(theme_src())
+```
+
+```{r}
+#| label: xtab-pkgs
+pkgs <- readr::read_csv(here::here("xtab_pkgs.csv"), show_col_types = FALSE) |>
+    filter(package != "stats")
+
+knitr::kable(pkgs, format = "html")
+```
+
+
+## Dependencies 
+
+::::: {.nonincremental}
+
+:::: {.columns }
+
+::: {.column}
+
+### Pros
+
+* Avoid recreating the wheel
+* Lean on work, expertise of others
+
+:::
+
+::: {.column}
+
+### Cons
+
+* Dependencies can grow exponentially
+* Difficult or complex installations
+* System dependencies (ever setup GDAL?)
+* Work across OSes
+
+:::
+
+::::
+
+:::::
+
+
+## Exploding dependencies
+
+The dependency of my dependency is also my dependency
+
+```{r}
+#| label: get-deps
+pkgs_deps <- pkgs |>
+    mutate(package = forcats::fct_recode(package, "camille-s/camiller" = "camiller") |>
+        as.character()) |>
+    mutate(deps = purrr::map(package, purrr::possibly(pak::pkg_deps, NULL))) |>
+    mutate(deps = purrr::map(deps, pull, package)) |>
+    tidyr::unnest(deps) |>
+    select(-purpose) |>
+    mutate(package = stringr::str_remove(package, "^.+/"))
+
+deps_gr <- pkgs_deps |>
+    tidygraph::as_tbl_graph(directed = TRUE) |>
+    mutate(type = ifelse(name %in% pkgs_deps$package, "direct", "indirect"))
+```
+
+
+```{r}
+#| label: dep-graph
+#| fig-cap: Network of direct & indirect dependencies in example project
+#| fig-height: 5
+#| fig-cap-location: top
+ggraph(deps_gr, layout = "stress") +
+    geom_edge_link(alpha = 0.4) +
+    geom_node_point(aes(color = type, size = type), alpha = 0.9) +
+    scale_color_manual(values = c(direct = unname(pal["fuschia"]), indirect = "gray30")) +
+    scale_size_manual(values = c(direct = 10, indirect = 4)) +
+    theme(
+        panel.grid = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        legend.position = "inside",
+        legend.position.inside = c(0, 1),
+        legend.justification = c(0, 1)
+    ) +
+    labs(x = NULL, y = NULL, color = "Dependency type", size = "Dependency type")
+```
+
+
+## Package contents
+
+::::: {.nonincremental}
+
+:::: {.columns}
+
+::: {.column width=40%}
+* What goes into a package depends on its purpose
+* Usually bulk is functions
+:::
+
+::: {.column width=60%}
+```{r}
+#| label: pkg-contents
+#| fig-cap: Number of objects by type, packages in example project
+#| fig-height: 8
+# from https://stackoverflow.com/a/24788334/5325862
+get_ns <- function(pkg) {
+    ns <- get(".__NAMESPACE__.", inherits = FALSE, envir = asNamespace(pkg, base.OK = FALSE))
+    funs <- ls(ns$exports)
+    data <- ls(ns$lazydata)
+    classes <- getClasses(asNamespace(pkg))
+    list(functions = funs, datasets = data, classes = classes)
+}
+
+exports <- pkgs |>
+    mutate(ns = purrr::map(package, get_ns)) |>
+    tidyr::unnest_wider(ns) |>
+    mutate(across(c(functions, datasets, classes), lengths)) |>
+    tidyr::pivot_longer(functions:classes, names_to = "obj_type", values_to = "n", names_ptypes = list(obj_type = factor()))
+
+exports |>
+    mutate(package = forcats::as_factor(package) |>
+        forcats::fct_reorder(n, .fun = sum)) |>
+    ggplot(aes(x = n, y = package, fill = obj_type)) +
+    geom_col(position = position_stack(reverse = TRUE), width = 0.8, alpha = 0.9) +
+    scale_x_continuous(expand = expansion(mult = c(0, 0.05))) +
+    scale_fill_manual(values = unname(pal[c(1, 4, 3)])) +
+    theme(
+        legend.position = "inside",
+        legend.position.inside = c(1, 0),
+        legend.justification = c(1, 0),
+        panel.grid.major.y = element_blank(),
+        axis.title = element_text(hjust = 0.99)
+    ) +
+    labs(x = "N", y = "Package name", fill = "Object type")
+```
+
+:::
+
+::::
+
+:::::
+
+
+# {{< iconify fluent fire-24-regular >}} Motivation
+
+
+## Why would you write a package?
+
+Some of my main motivators which may apply to you:
+
+* Standardize pieces of information (geographies, definitions)
+* Reduced repetition, access to utilities
+* Resources for teaching & onboarding
+
+
+# {{< iconify fluent lightbulb-24-regular >}} Option 1: Why you should develop packages
+
+
+## Standardization--single point of truth 
+
+Instead of scattered spreadsheets, text files, shapefiles, info stored in one person's brain, codify information into datasets, objects, rules, etc. For example:
+
+* Tables of weights to allocate shares of tract populations to neighborhoods
+* List of which towns constitute a region
+* Crosswalks from colloquial names to official towns
+* Census table numbers for batch API calls
+
+. . .
+
+Generating things with code means fewer mysteries
+
+
+## Standardization: Ask yourself
+
+What are the random bits of knowledge you have from experience that could disappear if you left your organization? 
+
+. . .
+
+(e.g. Hartford's North Meadows neighborhood is a data desert because it's mostly a jail)
+
+
+## Functions and utilities
+
+### Functions
+
+* Piece of code that takes 0 or more parameters, uses them for a predictable process
+* Replacement for repeated point-and-click operations, Excel formulas, macros
+
+
+## Functions and utilities
+
+### Examples
+
+You might want to write a function to...
+
+* Batch download Census data (multiple tables, geographies, years)
+* Do aggregations or other calculations
+* Handle complicated parameters or other pain points
+* Move to parallel processing
+
+
+## Functions and utilities: Ask yourself
+
+What's something you do repeatedly (multiple times a day, at the start of each quarter, every now & then) that:
+
+* Needs to happen in the same (or predictable) way
+* Needs to account for different possible factors
+* Consistency and accuracy matter
+
+. . .
+
+(e.g. What things do you need _every_ time you leave the house, and what things do you need _sometimes_? What factors determine that?)
+
+
+## Teaching
+
+I just had my first semester teaching data visualization at UMBC! Developing a package for the course was incredibly helpful.
+
+* A few utility functions for students to use or base their own code off of
+* A bunch of datasets for the class
+* Reference materials: documentation, source information, code used to create datasets
+* Versioned, so I can update package and have students reinstall
+* Students can contribute code to the project (great resume addition!)
+
+
+## Teaching
+
+* By installing the course package, students had access to all the data we used for the class
+* Kept us on the same page with updates, corrections, and additions
+
+. . .
+
+Same applies for onboarding new hires and interns
+
+
+## Teaching & training: Ask yourself
+
+* What's a concept you have to explain, or a process you have to setup, or a rule that needs to be followed, every time you work with someone new (intern cohorts, new hires, new semester)? 
+* How could you standardize and document those processes to take some weight off yourself?
+
+. . .
+
+(e.g. a packaged list of ACS table numbers means fewer "which table should I use to..." emails & DMs)
+
+
+# {{< iconify fluent code-block-24-regular >}} Option 2: Walkthrough
+
+## Automating common tasks {.smaller}
+
+A common workflow at DataHaven, and how I manage it with custom packages:
+
+* Download a 2022 5-year ACS table on housing tenure for Connecticut
+    - Then download the same table for every county in Connecticut
+    - Then download the same table for every town in every county
+    - Then download the same table for every tract
+* Aggregate values for the towns in Greater New Haven
+    - Then do it for the towns in Greater Hartford
+    - Then do it for the towns in Fairfield County
+* Aggregate values for the tracts that make up each neighborhood in New Haven, with weights
+    - Then do it for the neighborhoods in Hartford
+    - Then do it for the neighborhoods in Bridgeport
+
+## Automating common tasks {.smaller}
+
+* Oh wait, do I also need PUMAs?
+* 3 health departments also want aggregates for their service areas
+* What about when the next ACS drops?
+  
+. . .
+
+And I have 10 more ACS tables to do!
+
+## Automating common tasks {.smaller}
+
+A common guideline is once you've done the same thing 3 times, you should write a function. [^@W.B2023] In this case, I could write a function takes several inputs:
+
+* A table number
+* A year
+* A list of geographies, separated by level (town, county, state, tract, etc)
+* Lists of regions to aggregate towns into
+* Tract-neighborhood crosswalks with optional weights
+* Plus a few other options (1-year vs 5-year estimates, US values, etc)
+
+. . .
+
+Then using that information, assemble a query for the Census API, make a bunch of calls, aggregate as needed, then return a single data frame.
+
+## `multi_geo_acs`
+
+Rather than write code to build those queries from scratch, my function actually depends on some lower-level functions in the {`tidycensus`} package. Calling the function with some parameters is easy:
+
+```{r}
+#| label: cwi-download
+#| include: false
+#| eval: false
+# avoid running each time slides rebuild
+df <- cwi::multi_geo_acs("B25003",
+    year = 2022, towns = "all",
+    regions = cwi::regions[c("Greater New Haven", "New Haven Inner Ring", "New Haven Outer Ring")],
+    tracts = "all"
+)
+readr::write_csv(df, "cwi_example.csv")
+```
+
+```{r}
+#| label: cwi1
+#| echo: true
+#| eval: false
+cwi::multi_geo_acs(
+    table = "B25003",
+    year = 2022,
+    towns = "all",
+    regions = list(
+        "Greater New Haven" = c("Bethany", "Branford", "East Haven", "Guilford", "Hamden", "Madison", "Milford", "New Haven", "North Branford", "North Haven", "Orange", "West Haven", "Woodbridge"),
+        "New Haven Inner Ring" = c("East Haven", "Hamden", "West Haven"),
+        "New Haven Outer Ring" = c("Bethany", "Branford", "Guilford", "Madison", "Milford", "North Branford", "North Haven", "Orange", "Woodbridge")
+    ),
+    tracts = "all"
+)
+```
+
+## `multi_geo_acs`
+
+Output: a data frame with all the geographies that's easy to work with.
+
+```{r}
+#| label: cwi-tbl
+tenure_data <- read.csv("cwi_example.csv") |>
+    head()
+tenure_data
+```
+
+## Adding reference data
+
+Two pieces of reference data can be bundled into the package to make the function easier to use: common table numbers and region definitions. Now that becomes:
+
+```{r}
+#| label: cwi2
+#| echo: true
+#| eval: false
+cwi::multi_geo_acs(
+    table = cwi::basic_table_nums$tenure,
+    year = 2022,
+    towns = "all",
+    regions = cwi::regions[c(
+        "Greater New Haven",
+        "New Haven Inner Ring",
+        "New Haven Outer Ring"
+    )],
+    tracts = "all"
+)
+```
+
+## Batch processing
+
+Having a function makes it easier to repeat this process. We can call the function once but iterate over a list of tables (or any other parameter):
+
+```{r}
+#| label: cwi3
+#| echo: true
+#| eval: false
+purrr::map(cwi::basic_table_nums[c("total_pop", "tenure", "housing_cost")],
+    cwi::multi_geo_acs,
+    year = 2022,
+    towns = "all",
+    regions = cwi::regions[c(
+        "Greater New Haven",
+        "New Haven Inner Ring",
+        "New Haven Outer Ring"
+    )],
+    tracts = "all"
+)
+```
+
+## Other utilities
+
+Your functions can fit together so each one handles one task. Here's one that converts those variable numbers into readable labels:
+
+```{r}
+#| label: cwi4
+#| echo: true
+# using the tenure data from before
+cwi::label_acs(tenure_data, year = 2022)
+```
+
+# {{< iconify fluent emoji-meme-24-regular >}} Now that you're convinced...
+
+
+## The hard parts
+
+_Decent_ packages that no one but yourself will use are easy enough to develop. _Good_ packages that are useful for other people take a lot more tedious work:
+
+* Clear documentation of every function, dataset, and class
+* Handling edge cases & errors, incl. preempting user error
+* Unit testing
+* Bug fixes & routine maintenance
+* Keeping up with dependency updates & changes
+
+
+## The hard parts
+
+* Tedious, hard, sometimes boring, but worth the effort!
+* Recruit coworkers & interns to test your code
+* Be open to criticism
+* For managers / directors: please invest in your employees' time to develop own tools
+
+# {{< iconify fluent bow-tie-24-regular >}} Thank you! {background-image="images/strings.jpg" background-opacity="0.2"}
+
+## Thank you! {.larger}
+
+{{< iconify fluent code-24-regular >}} Get the code for these slides: [{{< iconify fe github-alt >}}/camille-s/pkgs-tugis](https://github.com/camille-s/pkgs-tugis)
+
+{{< iconify fluent branch-24-regular >}} Follow me on GitHub: [camille-s](https://github.com/camille-s/)
+
+{{< iconify fluent book-24-regular >}} Read the book on R Packages: [r-pkgs.org](https://r-pkgs.org/)
+
+{{< iconify fluent data-histogram-24-regular >}} See DataHaven's work: [ctdatahaven.org](https://ctdatahaven.org/)
+
+{{< iconify fluent fork-24-regular >}} Adapt my {`cwi`} package for your area: [{{< iconify fe github-alt >}}/CT-Data-Haven/cwi](https://github.com/CT-Data-Haven/cwi)

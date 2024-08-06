@@ -1,0 +1,18 @@
+package,purpose
+camiller,"Personal-turned-organization package, stupid name"
+data.table,"Very fast analysis, needed for single function"
+dplyr,"Workhorse for analysis, manipulation"
+forcats,Working with factors (categorical data types)
+here,"Path resolution across files, OSes"
+janitor,Data cleanup utilities
+knitr,Format tables
+lubridate,Handle dates flexibly
+openxlsx,Write & format Excel workbooks
+purrr,Iterate over lists (map- or apply-type functions)
+readr,Read multiple file types
+readxl,Read Excel files
+rlang,Behind the scenes utilities
+stats,"Base R functions, rarely call explicitly"
+stringr,String manipulation
+tibble,Data frame creation
+tidyr,Data reshaping

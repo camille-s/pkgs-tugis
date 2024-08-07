@@ -418,8 +418,16 @@ Camille Seaberry
 <li class="fragment">Option 1 is a high-level overview of why you might want to develop a package</li>
 <li class="fragment">Option 2 is a more code-oriented walkthrough of what you can do with a package</li>
 </ul>
+<p>All the slides are online: <a href="https://bit.ly/tu-pkgs">bit.ly/tu-pkgs</a></p>
+<div style="max-width: 100px;">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="qr-code.png" class="img-fluid quarto-figure quarto-figure-left"></p>
+</figure>
+</div>
+</div>
 </section>
-<section id="about-me" class="slide level2 incremental">
+<section id="about-me" class="slide level2 smaller">
 <h2>About me</h2>
 <ul>
 <li class="fragment">9ish years working with public data at or with nonprofits focused on demographics, public health, community needs &amp; assets</li>
@@ -536,23 +544,19 @@ Camille Seaberry
 <div>
 <div class="columns">
 <div class="column">
-<section id="pros" class="level3">
-<h3>Pros</h3>
+<p><strong>Pros</strong></p>
 <ul>
 <li>Avoid recreating the wheel</li>
 <li>Lean on work, expertise of others</li>
 </ul>
-</section>
 </div><div class="column">
-<section id="cons" class="level3">
-<h3>Cons</h3>
+<p><strong>Cons</strong></p>
 <ul>
 <li>Dependencies can grow exponentially</li>
 <li>Difficult or complex installations</li>
 <li>System dependencies (ever setup GDAL?)</li>
 <li>Work across OSes</li>
 </ul>
-</section>
 </div></div>
 </div>
 </section>
@@ -608,9 +612,8 @@ Camille Seaberry
 <p>Instead of scattered spreadsheets, text files, shapefiles, info stored in one person’s brain, codify information into datasets, objects, rules, etc. For example:</p>
 <ul>
 <li class="fragment">Tables of weights to allocate shares of tract populations to neighborhoods</li>
-<li class="fragment">List of which towns constitute a region</li>
+<li class="fragment">Definitions and recommendations</li>
 <li class="fragment">Crosswalks from colloquial names to official towns</li>
-<li class="fragment">Census table numbers for batch API calls</li>
 </ul>
 <div class="fragment">
 <p>Generating things with code means fewer mysteries</p>
@@ -623,20 +626,15 @@ Camille Seaberry
 <p>(e.g.&nbsp;Hartford’s North Meadows neighborhood is a data desert because it’s mostly a jail)</p>
 </div>
 </section>
-<section id="functions-and-utilities" class="slide level2">
-<h2>Functions and utilities</h2>
-<section id="functions" class="level3">
-<h3>Functions</h3>
+<section id="functions" class="slide level2">
+<h2>Functions</h2>
 <ul>
 <li class="fragment">Piece of code that takes 0 or more parameters, uses them for a predictable process</li>
 <li class="fragment">Replacement for repeated point-and-click operations, Excel formulas, macros</li>
 </ul>
 </section>
-</section>
-<section id="functions-and-utilities-1" class="slide level2">
-<h2>Functions and utilities</h2>
-<section id="examples" class="level3">
-<h3>Examples</h3>
+<section id="functions-examples" class="slide level2">
+<h2>Functions: examples</h2>
 <p>You might want to write a function to…</p>
 <ul>
 <li class="fragment">Batch download Census data (multiple tables, geographies, years)</li>
@@ -644,7 +642,6 @@ Camille Seaberry
 <li class="fragment">Handle complicated parameters or other pain points</li>
 <li class="fragment">Move to parallel processing</li>
 </ul>
-</section>
 </section>
 <section id="functions-and-utilities-ask-yourself" class="slide level2">
 <h2>Functions and utilities: Ask yourself</h2>
@@ -658,7 +655,7 @@ Camille Seaberry
 <p>(e.g.&nbsp;What things do you need <em>every</em> time you leave the house, and what things do you need <em>sometimes</em>? What factors determine that?)</p>
 </div>
 </section>
-<section id="teaching" class="slide level2">
+<section id="teaching" class="slide level2 smaller">
 <h2>Teaching</h2>
 <p>I just had my first semester teaching data visualization at UMBC! Developing a package for the course was incredibly helpful.</p>
 <ul>
@@ -716,7 +713,7 @@ Camille Seaberry
 </ul></li>
 </ul>
 </section>
-<section id="automating-common-tasks-1" class="slide level2 smaller">
+<section id="automating-common-tasks-1" class="slide level2">
 <h2>Automating common tasks</h2>
 <ul>
 <li class="fragment">Oh wait, do I also need PUMAs?</li>
@@ -729,7 +726,7 @@ Camille Seaberry
 </section>
 <section id="automating-common-tasks-2" class="slide level2 smaller">
 <h2>Automating common tasks</h2>
-<p>A common guideline is once you’ve done the same thing 3 times, you should write a function. [^@W.B2023] In this case, I could write a function takes several inputs:</p>
+<p>A common guideline is once you’ve done the same thing 3 times, you should write a function. <sup>1</sup> In this case, I could write a function takes several inputs:</p>
 <ul>
 <li class="fragment">A table number</li>
 <li class="fragment">A year</li>
@@ -741,7 +738,7 @@ Camille Seaberry
 <div class="fragment">
 <p>Then using that information, assemble a query for the Census API, make a bunch of calls, aggregate as needed, then return a single data frame.</p>
 </div>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>See Wickham, <em>R for Data Science</em></p></li></ol></aside></section>
 <section id="multi_geo_acs" class="slide level2">
 <h2><code>multi_geo_acs</code></h2>
 <p>Rather than write code to build those queries from scratch, my function actually depends on some lower-level functions in the {<code>tidycensus</code>} package. Calling the function with some parameters is easy:</p>
@@ -868,13 +865,14 @@ Camille Seaberry
 <p><iconify-icon inline="true" role="img" icon="fluent:branch-24-regular" aria-label="Icon branch-24-regular from fluent Iconify.design set." title="Icon branch-24-regular from fluent Iconify.design set."></iconify-icon> Follow me on GitHub: <a href="https://github.com/camille-s/">camille-s</a></p>
 <p><iconify-icon inline="true" role="img" icon="fluent:book-24-regular" aria-label="Icon book-24-regular from fluent Iconify.design set." title="Icon book-24-regular from fluent Iconify.design set."></iconify-icon> Read the book on R Packages: <a href="https://r-pkgs.org/">r-pkgs.org</a></p>
 <p><iconify-icon inline="true" role="img" icon="fluent:data-histogram-24-regular" aria-label="Icon data-histogram-24-regular from fluent Iconify.design set." title="Icon data-histogram-24-regular from fluent Iconify.design set."></iconify-icon> See DataHaven’s work: <a href="https://ctdatahaven.org/">ctdatahaven.org</a></p>
-<p><iconify-icon inline="true" role="img" icon="fluent:fork-24-regular" aria-label="Icon fork-24-regular from fluent Iconify.design set." title="Icon fork-24-regular from fluent Iconify.design set."></iconify-icon> Adapt my {<code>cwi</code>} package for your area: <a href="https://github.com/CT-Data-Haven/cwi"><iconify-icon inline="true" role="img" icon="fe:github-alt" aria-label="Icon github-alt from fe Iconify.design set." title="Icon github-alt from fe Iconify.design set."></iconify-icon>/CT-Data-Haven/cwi</a></p>
+<p><iconify-icon inline="true" role="img" icon="fluent:branch-fork-24-regular" aria-label="Icon branch-fork-24-regular from fluent Iconify.design set." title="Icon branch-fork-24-regular from fluent Iconify.design set."></iconify-icon> Adapt my {<code>cwi</code>} package for your area: <a href="https://github.com/CT-Data-Haven/cwi"><iconify-icon inline="true" role="img" icon="fe:github-alt" aria-label="Icon github-alt from fe Iconify.design set." title="Icon github-alt from fe Iconify.design set."></iconify-icon>/CT-Data-Haven/cwi</a></p>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
 </section></section>
+
     </div>
   </div>
 

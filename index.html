@@ -415,8 +415,8 @@ Camille Seaberry
 <h2>Quick note</h2>
 <p>For the sake of time, consider this a choose-your-own-adventure presentation, with 2 main paths:</p>
 <ul>
-<li class="fragment">Option 1 is a high-level overview of why you might want to develop a package</li>
-<li class="fragment">Option 2 is a more code-oriented walkthrough of what you can do with a package</li>
+<li>Option 1 is a <em>high-level overview</em> of why you might want to develop a package</li>
+<li>Option 2 is a more <em>code-oriented walkthrough</em> of what you can do with a package</li>
 </ul>
 <p>All the slides are online: <a href="https://bit.ly/tu-pkgs">bit.ly/tu-pkgs</a></p>
 <div style="max-width: 100px;">
@@ -430,11 +430,11 @@ Camille Seaberry
 <section id="about-me" class="slide level2 smaller">
 <h2>About me</h2>
 <ul>
-<li class="fragment">9ish years working with public data at or with nonprofits focused on demographics, public health, community needs &amp; assets</li>
-<li class="fragment">Very excited about useful data and good code</li>
-<li class="fragment">Extremely disorganized… except in my code</li>
-<li class="fragment">Hate rewriting / copying &amp; pasting code, hardcoding anything</li>
-<li class="fragment">Work remotely</li>
+<li>9ish years working with public data at or with nonprofits focused on demographics, public health, community needs &amp; assets</li>
+<li>Very excited about useful data and good code</li>
+<li>Extremely disorganized… except in my code</li>
+<li>Hate rewriting / copying &amp; pasting code, hardcoding anything</li>
+<li>Work remotely</li>
 </ul>
 <div class="fragment">
 <p>Those last 3 necessitated building tools, eventually packages for myself &amp; colleagues</p>
@@ -448,12 +448,12 @@ Camille Seaberry
 <section id="what-is-a-package" class="slide level2">
 <h2>What is a package?</h2>
 <ul>
-<li class="fragment">Different terms in different languages (package, library, module, etc)</li>
-<li class="fragment">Generally a collection of code for some specific purpose</li>
-<li class="fragment">In R, usually distributed open source &amp; free of charge
+<li>Different terms in different languages (package, library, module, etc)</li>
+<li>Generally a <em>collection of code</em> for some specific purpose</li>
+<li>In R, usually distributed <em>open source</em> &amp; free of charge
 <ul>
-<li class="fragment">Often start from individual needs, shared with community</li>
-<li class="fragment">Grow to form ecosystems of shared techniques, data types, frameworks</li>
+<li>Often start from individual needs, shared with community</li>
+<li>Grow to form ecosystems of shared techniques, data types, frameworks</li>
 </ul></li>
 </ul>
 </section>
@@ -546,23 +546,23 @@ Camille Seaberry
 <div class="column">
 <p><strong>Pros</strong></p>
 <ul>
-<li>Avoid recreating the wheel</li>
-<li>Lean on work, expertise of others</li>
+<li class="fragment">Avoid recreating the wheel</li>
+<li class="fragment">Lean on work, expertise of others</li>
 </ul>
 </div><div class="column">
 <p><strong>Cons</strong></p>
 <ul>
-<li>Dependencies can grow exponentially</li>
-<li>Difficult or complex installations</li>
-<li>System dependencies (ever setup GDAL?)</li>
-<li>Work across OSes</li>
+<li class="fragment">Dependencies can grow exponentially</li>
+<li class="fragment">Difficult or complex installations</li>
+<li class="fragment">System dependencies (ever setup GDAL?)</li>
+<li class="fragment">Work across OSes</li>
 </ul>
 </div></div>
 </div>
 </section>
 <section id="exploding-dependencies" class="slide level2">
 <h2>Exploding dependencies</h2>
-<p>The dependency of my dependency is also my dependency</p>
+<p>The <em>dependency</em> of my <em>dependency</em> is also my <em>dependency</em></p>
 
 <img data-src="index_files/figure-revealjs/dep-graph-1.png" class="img-fluid r-stretch quarto-figure-center" width="960"><p class="caption">Network of direct &amp; indirect dependencies in example project</p></section>
 <section id="package-contents" class="slide level2">
@@ -597,9 +597,9 @@ Camille Seaberry
 <h2>Why would you write a package?</h2>
 <p>Some of my main motivators which may apply to you:</p>
 <ul>
-<li class="fragment">Standardize pieces of information (geographies, definitions)</li>
-<li class="fragment">Reduced repetition, access to utilities</li>
-<li class="fragment">Resources for teaching &amp; onboarding</li>
+<li><em>Standardize</em> pieces of information (geographies, definitions)</li>
+<li><em>Reduce repetition</em>, access to utilities</li>
+<li>Collect <em>resources</em> for teaching &amp; onboarding</li>
 </ul>
 </section></section>
 <section>
@@ -609,11 +609,11 @@ Camille Seaberry
 </section>
 <section id="standardizationsingle-point-of-truth" class="slide level2">
 <h2>Standardization–single point of truth</h2>
-<p>Instead of scattered spreadsheets, text files, shapefiles, info stored in one person’s brain, codify information into datasets, objects, rules, etc. For example:</p>
+<p>Instead of scattered spreadsheets, text files, shapefiles, info stored in one person’s brain, <em>codify information</em> into datasets, objects, rules, etc. For example:</p>
 <ul>
-<li class="fragment">Tables of weights to allocate shares of tract populations to neighborhoods</li>
-<li class="fragment">Definitions and recommendations</li>
-<li class="fragment">Crosswalks from colloquial names to official towns</li>
+<li>Tables of weights to allocate shares of tract populations to neighborhoods</li>
+<li>Definitions and recommendations</li>
+<li>Crosswalks from colloquial names to official towns</li>
 </ul>
 <div class="fragment">
 <p>Generating things with code means fewer mysteries</p>
@@ -629,27 +629,27 @@ Camille Seaberry
 <section id="functions" class="slide level2">
 <h2>Functions</h2>
 <ul>
-<li class="fragment">Piece of code that takes 0 or more parameters, uses them for a predictable process</li>
-<li class="fragment">Replacement for repeated point-and-click operations, Excel formulas, macros</li>
+<li>Piece of code that takes 0 or more parameters, uses them for a predictable process</li>
+<li>Replacement for repeated point-and-click operations, Excel formulas, macros</li>
 </ul>
 </section>
 <section id="functions-examples" class="slide level2">
 <h2>Functions: examples</h2>
 <p>You might want to write a function to…</p>
 <ul>
-<li class="fragment">Batch download Census data (multiple tables, geographies, years)</li>
-<li class="fragment">Do aggregations or other calculations</li>
-<li class="fragment">Handle complicated parameters or other pain points</li>
-<li class="fragment">Move to parallel processing</li>
+<li><em>Batch</em> download Census data (multiple tables, geographies, years)</li>
+<li>Do <em>aggregations</em> or other calculations</li>
+<li>Handle complicated <em>parameters</em> or other pain points</li>
+<li>Move to <em>parallel processing</em></li>
 </ul>
 </section>
 <section id="functions-and-utilities-ask-yourself" class="slide level2">
 <h2>Functions and utilities: Ask yourself</h2>
 <p>What’s something you do repeatedly (multiple times a day, at the start of each quarter, every now &amp; then) that:</p>
 <ul>
-<li class="fragment">Needs to happen in the same (or predictable) way</li>
-<li class="fragment">Needs to account for different possible factors</li>
-<li class="fragment">Consistency and accuracy matter</li>
+<li>Needs to happen in the same (or predictable) way</li>
+<li>Needs to account for different possible factors</li>
+<li>Consistency and accuracy matter</li>
 </ul>
 <div class="fragment">
 <p>(e.g.&nbsp;What things do you need <em>every</em> time you leave the house, and what things do you need <em>sometimes</em>? What factors determine that?)</p>
@@ -659,28 +659,29 @@ Camille Seaberry
 <h2>Teaching</h2>
 <p>I just had my first semester teaching data visualization at UMBC! Developing a package for the course was incredibly helpful.</p>
 <ul>
-<li class="fragment">A few utility functions for students to use or base their own code off of</li>
-<li class="fragment">A bunch of datasets for the class</li>
-<li class="fragment">Reference materials: documentation, source information, code used to create datasets</li>
-<li class="fragment">Versioned, so I can update package and have students reinstall</li>
-<li class="fragment">Students can contribute code to the project (great resume addition!)</li>
+<li>A few utility functions for students to use or base their own code off of</li>
+<li>A bunch of datasets for the class</li>
+<li>Reference materials: documentation, source information, code used to create datasets</li>
+<li>Versioned, so I can update package and have students reinstall</li>
+<li>Students can contribute code to the project (great resume addition!)</li>
 </ul>
 </section>
 <section id="teaching-1" class="slide level2">
 <h2>Teaching</h2>
 <ul>
-<li class="fragment">By installing the course package, students had access to all the data we used for the class</li>
-<li class="fragment">Kept us on the same page with updates, corrections, and additions</li>
+<li>By installing the course package, students had access to all the data we used for the class</li>
+<li>Kept us on the same page with updates, corrections, and additions</li>
 </ul>
 <div class="fragment">
 <p>Same applies for onboarding new hires and interns</p>
+<p>(Feel free to repurpose the package in your own teaching: <a href="https://umbc-viz.github.io/justviz" data-preview-link="true">umbc-viz.github.io/justviz</a>)</p>
 </div>
 </section>
 <section id="teaching-training-ask-yourself" class="slide level2">
 <h2>Teaching &amp; training: Ask yourself</h2>
 <ul>
-<li class="fragment">What’s a concept you have to explain, or a process you have to setup, or a rule that needs to be followed, every time you work with someone new (intern cohorts, new hires, new semester)?</li>
-<li class="fragment">How could you standardize and document those processes to take some weight off yourself?</li>
+<li>What’s a concept you have to explain, or a process you have to setup, or a rule that needs to be followed, every time you work with someone new (intern cohorts, new hires, new semester)?</li>
+<li>How could you standardize and document those processes to take some weight off yourself?</li>
 </ul>
 <div class="fragment">
 <p>(e.g.&nbsp;a packaged list of ACS table numbers means fewer “which table should I use to…” emails &amp; DMs)</p>
@@ -693,47 +694,51 @@ Camille Seaberry
 </section>
 <section id="automating-common-tasks" class="slide level2 smaller">
 <h2>Automating common tasks</h2>
+<div>
 <p>A common workflow at DataHaven, and how I manage it with custom packages:</p>
 <ul>
 <li class="fragment">Download a 2022 5-year ACS table on housing tenure for Connecticut
 <ul>
 <li class="fragment">Then download the same table for every county in Connecticut</li>
 <li class="fragment">Then download the same table for every town in every county</li>
-<li class="fragment">Then download the same table for every tract</li>
+<li class="fragment">Then download the same table for every tract in every county</li>
 </ul></li>
 <li class="fragment">Aggregate values for the towns in Greater New Haven
 <ul>
-<li class="fragment">Then do it for the towns in Greater Hartford</li>
-<li class="fragment">Then do it for the towns in Fairfield County</li>
+<li class="fragment">Then aggregate the towns in Greater Hartford</li>
+<li class="fragment">Then aggregate the towns in Fairfield County</li>
 </ul></li>
 <li class="fragment">Aggregate values for the tracts that make up each neighborhood in New Haven, with weights
 <ul>
-<li class="fragment">Then do it for the neighborhoods in Hartford</li>
-<li class="fragment">Then do it for the neighborhoods in Bridgeport</li>
+<li class="fragment">Then aggregate the neighborhoods in Hartford, with another table of weights</li>
+<li class="fragment">Then aggregate the neighborhoods in Bridgeport, with another nother table of weights</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="automating-common-tasks-1" class="slide level2">
 <h2>Automating common tasks</h2>
+<div>
 <ul>
 <li class="fragment">Oh wait, do I also need PUMAs?</li>
 <li class="fragment">3 health departments also want aggregates for their service areas</li>
 <li class="fragment">What about when the next ACS drops?</li>
 </ul>
+</div>
 <div class="fragment">
 <p>And I have 10 more ACS tables to do!</p>
 </div>
 </section>
 <section id="automating-common-tasks-2" class="slide level2 smaller">
 <h2>Automating common tasks</h2>
-<p>A common guideline is once you’ve done the same thing 3 times, you should write a function. <sup>1</sup> In this case, I could write a function takes several inputs:</p>
+<p>A common guideline is if you do the same thing 3 times, <em>you should write a function</em>. <sup>1</sup> In this case, I could write a function that takes several inputs:</p>
 <ul>
-<li class="fragment">A table number</li>
-<li class="fragment">A year</li>
-<li class="fragment">A list of geographies, separated by level (town, county, state, tract, etc)</li>
-<li class="fragment">Lists of regions to aggregate towns into</li>
-<li class="fragment">Tract-neighborhood crosswalks with optional weights</li>
-<li class="fragment">Plus a few other options (1-year vs 5-year estimates, US values, etc)</li>
+<li>A table number</li>
+<li>A year</li>
+<li>A list of geographies, separated by level (town, county, state, tract, etc)</li>
+<li>Lists of regions to aggregate towns into</li>
+<li>Tract-neighborhood crosswalks with optional weights</li>
+<li>Plus a few other options (1-year vs 5-year estimates, US values, etc)</li>
 </ul>
 <div class="fragment">
 <p>Then using that information, assemble a query for the Census API, make a bunch of calls, aggregate as needed, then return a single data frame.</p>
@@ -742,6 +747,7 @@ Camille Seaberry
 <section id="multi_geo_acs" class="slide level2">
 <h2><code>multi_geo_acs</code></h2>
 <p>Rather than write code to build those queries from scratch, my function actually depends on some lower-level functions in the {<code>tidycensus</code>} package. Calling the function with some parameters is easy:</p>
+<div class="fragment">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>cwi<span class="sc">::</span><span class="fu">multi_geo_acs</span>(</span>
 <span id="cb1-2"><a href=""></a>    <span class="at">table =</span> <span class="st">"B25003"</span>,</span>
@@ -754,6 +760,7 @@ Camille Seaberry
 <span id="cb1-9"><a href=""></a>    ),</span>
 <span id="cb1-10"><a href=""></a>    <span class="at">tracts =</span> <span class="st">"all"</span></span>
 <span id="cb1-11"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </section>
 <section id="multi_geo_acs-1" class="slide level2">
@@ -774,8 +781,9 @@ Camille Seaberry
 <section id="adding-reference-data" class="slide level2">
 <h2>Adding reference data</h2>
 <p>Two pieces of reference data can be bundled into the package to make the function easier to use: common table numbers and region definitions. Now that becomes:</p>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>cwi<span class="sc">::</span><span class="fu">multi_geo_acs</span>(</span>
+<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="2,5-9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>cwi<span class="sc">::</span><span class="fu">multi_geo_acs</span>(</span>
 <span id="cb3-2"><a href=""></a>    <span class="at">table =</span> cwi<span class="sc">::</span>basic_table_nums<span class="sc">$</span>tenure,</span>
 <span id="cb3-3"><a href=""></a>    <span class="at">year =</span> <span class="dv">2022</span>,</span>
 <span id="cb3-4"><a href=""></a>    <span class="at">towns =</span> <span class="st">"all"</span>,</span>
@@ -787,12 +795,13 @@ Camille Seaberry
 <span id="cb3-10"><a href=""></a>    <span class="at">tracts =</span> <span class="st">"all"</span></span>
 <span id="cb3-11"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
 </section>
 <section id="batch-processing" class="slide level2">
 <h2>Batch processing</h2>
 <p>Having a function makes it easier to repeat this process. We can call the function once but iterate over a list of tables (or any other parameter):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>purrr<span class="sc">::</span><span class="fu">map</span>(cwi<span class="sc">::</span>basic_table_nums[<span class="fu">c</span>(<span class="st">"total_pop"</span>, <span class="st">"tenure"</span>, <span class="st">"housing_cost"</span>)],</span>
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>purrr<span class="sc">::</span><span class="fu">map</span>(cwi<span class="sc">::</span>basic_table_nums[<span class="fu">c</span>(<span class="st">"total_pop"</span>, <span class="st">"tenure"</span>, <span class="st">"housing_cost"</span>)],</span>
 <span id="cb4-2"><a href=""></a>    cwi<span class="sc">::</span>multi_geo_acs,</span>
 <span id="cb4-3"><a href=""></a>    <span class="at">year =</span> <span class="dv">2022</span>,</span>
 <span id="cb4-4"><a href=""></a>    <span class="at">towns =</span> <span class="st">"all"</span>,</span>
@@ -838,20 +847,20 @@ Camille Seaberry
 <h2>The hard parts</h2>
 <p><em>Decent</em> packages that no one but yourself will use are easy enough to develop. <em>Good</em> packages that are useful for other people take a lot more tedious work:</p>
 <ul>
-<li class="fragment">Clear documentation of every function, dataset, and class</li>
-<li class="fragment">Handling edge cases &amp; errors, incl.&nbsp;preempting user error</li>
-<li class="fragment">Unit testing</li>
-<li class="fragment">Bug fixes &amp; routine maintenance</li>
-<li class="fragment">Keeping up with dependency updates &amp; changes</li>
+<li>Clear <em>documentation</em> of every function, dataset, and class</li>
+<li>Handling <em>edge cases</em> &amp; errors, incl.&nbsp;preempting user error</li>
+<li>Unit <em>testing</em></li>
+<li><em>Bug fixes</em> &amp; routine maintenance</li>
+<li>Keeping up with <em>dependency</em> updates &amp; changes</li>
 </ul>
 </section>
 <section id="the-hard-parts-1" class="slide level2">
 <h2>The hard parts</h2>
 <ul>
-<li class="fragment">Tedious, hard, sometimes boring, but worth the effort!</li>
-<li class="fragment">Recruit coworkers &amp; interns to test your code</li>
-<li class="fragment">Be open to criticism</li>
-<li class="fragment">For managers / directors: please invest in your employees’ time to develop own tools</li>
+<li>Tedious, hard, sometimes boring, but worth the effort!</li>
+<li>Recruit coworkers &amp; interns to test your code</li>
+<li>Be open to criticism</li>
+<li>For managers / directors: please <em>invest in your employees’ time</em> to develop own tools</li>
 </ul>
 </section></section>
 <section>

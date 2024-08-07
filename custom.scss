@@ -26,6 +26,10 @@ html {
     font-family: $font-family-sans-serif;
 }
 
+em {
+    color: $selection-bg;
+}
+
 figcaption, p.caption {
     font-family: $presentation-heading-font;
 }

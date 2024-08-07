@@ -8,13 +8,14 @@ format:
         navigation-mode: vertical
         section-divs: true
         menu: true
-        incremental: true
+        incremental: false
         html-table-processing: none
         center: false
         margin: 0.05
         code-overflow: wrap
         controls: true
         controls-layout: bottom-right
+        code-line-numbers: true
 title-slide-attributes: 
     data-background-image: images/delta.jpg
     data-background-size: cover
@@ -41,8 +42,8 @@ filters:
 
 For the sake of time, consider this a choose-your-own-adventure presentation, with 2 main paths:
 
-* Option 1 is a high-level overview of why you might want to develop a package
-* Option 2 is a more code-oriented walkthrough of what you can do with a package
+* Option 1 is a _high-level overview_ of why you might want to develop a package
+* Option 2 is a more _code-oriented walkthrough_ of what you can do with a package
 
 All the slides are online: [bit.ly/tu-pkgs](https://bit.ly/tu-pkgs)
 
@@ -71,8 +72,8 @@ Those last 3 necessitated building tools, eventually packages for myself & colle
 ## What is a package?
 
 * Different terms in different languages (package, library, module, etc)
-* Generally a collection of code for some specific purpose
-* In R, usually distributed open source & free of charge
+* Generally a _collection of code_ for some specific purpose
+* In R, usually distributed _open source_ & free of charge
     - Often start from individual needs, shared with community
     - Grow to form ecosystems of shared techniques, data types, frameworks
 
@@ -91,7 +92,7 @@ library(showtext)
 # showtext_opts(dpi = 75)
 sysfonts::font_add_google("Source Sans 3")
 
-pal_mtx <- stylehaven::palx("#db4dd4", n_hues = 10, n_shades = 5, plot = FALSE)
+pal_mtx <- stylehaven::palx("#f137e8", n_hues = 10, n_shades = 5, plot = FALSE)
 pal <- pal_mtx$shade03[c("gray", "fuschia", "blue", "orange", "green")]
 theme_src <- function() {
     ggplot2::theme_minimal(base_family = "Source Sans 3", base_size = 24)
@@ -110,7 +111,7 @@ knitr::kable(pkgs, format = "html")
 
 ## Dependencies 
 
-::::: {.nonincremental}
+::::: {.incremental}
 
 :::: {.columns }
 
@@ -141,7 +142,7 @@ knitr::kable(pkgs, format = "html")
 
 ## Exploding dependencies
 
-The dependency of my dependency is also my dependency
+The _dependency_ of my _dependency_ is also my _dependency_
 
 ```{r}
 #| label: get-deps
@@ -219,7 +220,7 @@ exports |>
     ggplot(aes(x = n, y = package, fill = obj_type)) +
     geom_col(position = position_stack(reverse = TRUE), width = 0.8, alpha = 0.9) +
     scale_x_continuous(expand = expansion(mult = c(0, 0.05))) +
-    scale_fill_manual(values = unname(pal[c(1, 4, 3)])) +
+    scale_fill_manual(values = c("gray60", unname(pal[c(2, 3)]))) +
     theme(
         legend.position = "inside",
         legend.position.inside = c(1, 0),
@@ -244,9 +245,9 @@ exports |>
 
 Some of my main motivators which may apply to you:
 
-* Standardize pieces of information (geographies, definitions)
-* Reduced repetition, access to utilities
-* Resources for teaching & onboarding
+* _Standardize_ pieces of information (geographies, definitions)
+* _Reduce repetition_, access to utilities
+* Collect _resources_ for teaching & onboarding
 
 
 # {{< iconify fluent lightbulb-24-regular >}} Option 1: Why you should develop packages
@@ -254,7 +255,7 @@ Some of my main motivators which may apply to you:
 
 ## Standardization--single point of truth
 
-Instead of scattered spreadsheets, text files, shapefiles, info stored in one person's brain, codify information into datasets, objects, rules, etc. For example:
+Instead of scattered spreadsheets, text files, shapefiles, info stored in one person's brain, _codify information_ into datasets, objects, rules, etc. For example:
 
 * Tables of weights to allocate shares of tract populations to neighborhoods
 * Definitions and recommendations
@@ -284,10 +285,10 @@ What are the random bits of knowledge you have from experience that could disapp
 
 You might want to write a function to...
 
-* Batch download Census data (multiple tables, geographies, years)
-* Do aggregations or other calculations
-* Handle complicated parameters or other pain points
-* Move to parallel processing
+* _Batch_ download Census data (multiple tables, geographies, years)
+* Do _aggregations_ or other calculations
+* Handle complicated _parameters_ or other pain points
+* Move to _parallel processing_
 
 
 ## Functions and utilities: Ask yourself
@@ -323,6 +324,8 @@ I just had my first semester teaching data visualization at UMBC! Developing a p
 
 Same applies for onboarding new hires and interns
 
+(Feel free to repurpose the package in your own teaching: [umbc-viz.github.io/justviz](https://umbc-viz.github.io/justviz){preview-link="true"})
+
 
 ## Teaching & training: Ask yourself
 
@@ -338,24 +341,28 @@ Same applies for onboarding new hires and interns
 
 ## Automating common tasks {.smaller}
 
+::: {.incremental}
 A common workflow at DataHaven, and how I manage it with custom packages:
 
 * Download a 2022 5-year ACS table on housing tenure for Connecticut
     - Then download the same table for every county in Connecticut
     - Then download the same table for every town in every county
-    - Then download the same table for every tract
+    - Then download the same table for every tract in every county
 * Aggregate values for the towns in Greater New Haven
-    - Then do it for the towns in Greater Hartford
-    - Then do it for the towns in Fairfield County
+    - Then aggregate the towns in Greater Hartford
+    - Then aggregate the towns in Fairfield County
 * Aggregate values for the tracts that make up each neighborhood in New Haven, with weights
-    - Then do it for the neighborhoods in Hartford
-    - Then do it for the neighborhoods in Bridgeport
+    - Then aggregate the neighborhoods in Hartford, with another table of weights
+    - Then aggregate the neighborhoods in Bridgeport, with another nother table of weights
+:::
 
 ## Automating common tasks
 
+::: {.incremental}
 * Oh wait, do I also need PUMAs?
 * 3 health departments also want aggregates for their service areas
 * What about when the next ACS drops?
+:::
   
 . . .
 
@@ -363,7 +370,7 @@ And I have 10 more ACS tables to do!
 
 ## Automating common tasks {.smaller}
 
-A common guideline is once you've done the same thing 3 times, you should write a function. ^[See Wickham, _R for Data Science_] In this case, I could write a function takes several inputs:
+A common guideline is if you do the same thing 3 times, _you should write a function_. ^[See Wickham, _R for Data Science_] In this case, I could write a function that takes several inputs:
 
 * A table number
 * A year
@@ -379,6 +386,8 @@ Then using that information, assemble a query for the Census API, make a bunch o
 ## `multi_geo_acs`
 
 Rather than write code to build those queries from scratch, my function actually depends on some lower-level functions in the {`tidycensus`} package. Calling the function with some parameters is easy:
+
+. . .
 
 ```{r}
 #| label: cwi-download
@@ -425,10 +434,13 @@ tenure_data
 
 Two pieces of reference data can be bundled into the package to make the function easier to use: common table numbers and region definitions. Now that becomes:
 
+. . .
+
 ```{r}
 #| label: cwi2
 #| echo: true
 #| eval: false
+#| code-line-numbers: "2,5-9"
 cwi::multi_geo_acs(
     table = cwi::basic_table_nums$tenure,
     year = 2022,
@@ -450,6 +462,7 @@ Having a function makes it easier to repeat this process. We can call the functi
 #| label: cwi3
 #| echo: true
 #| eval: false
+#| code-line-numbers: "1-2"
 purrr::map(cwi::basic_table_nums[c("total_pop", "tenure", "housing_cost")],
     cwi::multi_geo_acs,
     year = 2022,
@@ -481,11 +494,11 @@ cwi::label_acs(tenure_data, year = 2022)
 
 _Decent_ packages that no one but yourself will use are easy enough to develop. _Good_ packages that are useful for other people take a lot more tedious work:
 
-* Clear documentation of every function, dataset, and class
-* Handling edge cases & errors, incl. preempting user error
-* Unit testing
-* Bug fixes & routine maintenance
-* Keeping up with dependency updates & changes
+* Clear _documentation_ of every function, dataset, and class
+* Handling _edge cases_ & errors, incl. preempting user error
+* Unit _testing_
+* _Bug fixes_ & routine maintenance
+* Keeping up with _dependency_ updates & changes
 
 
 ## The hard parts
@@ -493,7 +506,7 @@ _Decent_ packages that no one but yourself will use are easy enough to develop. 
 * Tedious, hard, sometimes boring, but worth the effort!
 * Recruit coworkers & interns to test your code
 * Be open to criticism
-* For managers / directors: please invest in your employees' time to develop own tools
+* For managers / directors: please _invest in your employees' time_ to develop own tools
 
 
 # {{< iconify fluent bow-tie-24-regular >}} Thank you! {background-image="images/strings.jpg" background-opacity="0.2"}

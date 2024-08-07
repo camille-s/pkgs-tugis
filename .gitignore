@@ -1,2 +1,6 @@
 xtab.R
 .vscode/*
+
+/.quarto/
+
+/.luarc.json

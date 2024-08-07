@@ -31,7 +31,6 @@ knitr:
   opts_knit:
     fig.showtext: true 
 filters: 
-    - qrcode
     - iconify
 ---
 
@@ -45,8 +44,15 @@ For the sake of time, consider this a choose-your-own-adventure presentation, wi
 * Option 1 is a high-level overview of why you might want to develop a package
 * Option 2 is a more code-oriented walkthrough of what you can do with a package
 
+All the slides are online: [bit.ly/tu-pkgs](https://bit.ly/tu-pkgs)
 
-## About me {.incremental}
+<div style="max-width: 100px;">
+
+![](qr-code.png){fig-align="left"}
+
+</div>
+
+## About me {.smaller}
 
 * 9ish years working with public data at or with nonprofits focused on demographics, public health, community needs & assets
 * Very excited about useful data and good code 
@@ -110,7 +116,7 @@ knitr::kable(pkgs, format = "html")
 
 ::: {.column}
 
-### Pros
+**Pros**
 
 * Avoid recreating the wheel
 * Lean on work, expertise of others
@@ -119,7 +125,7 @@ knitr::kable(pkgs, format = "html")
 
 ::: {.column}
 
-### Cons
+**Cons**
 
 * Dependencies can grow exponentially
 * Difficult or complex installations
@@ -246,14 +252,13 @@ Some of my main motivators which may apply to you:
 # {{< iconify fluent lightbulb-24-regular >}} Option 1: Why you should develop packages
 
 
-## Standardization--single point of truth 
+## Standardization--single point of truth
 
 Instead of scattered spreadsheets, text files, shapefiles, info stored in one person's brain, codify information into datasets, objects, rules, etc. For example:
 
 * Tables of weights to allocate shares of tract populations to neighborhoods
-* List of which towns constitute a region
+* Definitions and recommendations
 * Crosswalks from colloquial names to official towns
-* Census table numbers for batch API calls
 
 . . .
 
@@ -269,17 +274,13 @@ What are the random bits of knowledge you have from experience that could disapp
 (e.g. Hartford's North Meadows neighborhood is a data desert because it's mostly a jail)
 
 
-## Functions and utilities
-
-### Functions
+## Functions
 
 * Piece of code that takes 0 or more parameters, uses them for a predictable process
 * Replacement for repeated point-and-click operations, Excel formulas, macros
 
 
-## Functions and utilities
-
-### Examples
+## Functions: examples
 
 You might want to write a function to...
 
@@ -302,7 +303,7 @@ What's something you do repeatedly (multiple times a day, at the start of each q
 (e.g. What things do you need _every_ time you leave the house, and what things do you need _sometimes_? What factors determine that?)
 
 
-## Teaching
+## Teaching {.smaller}
 
 I just had my first semester teaching data visualization at UMBC! Developing a package for the course was incredibly helpful.
 
@@ -350,7 +351,7 @@ A common workflow at DataHaven, and how I manage it with custom packages:
     - Then do it for the neighborhoods in Hartford
     - Then do it for the neighborhoods in Bridgeport
 
-## Automating common tasks {.smaller}
+## Automating common tasks
 
 * Oh wait, do I also need PUMAs?
 * 3 health departments also want aggregates for their service areas
@@ -362,7 +363,7 @@ And I have 10 more ACS tables to do!
 
 ## Automating common tasks {.smaller}
 
-A common guideline is once you've done the same thing 3 times, you should write a function. [^@W.B2023] In this case, I could write a function takes several inputs:
+A common guideline is once you've done the same thing 3 times, you should write a function. ^[See Wickham, _R for Data Science_] In this case, I could write a function takes several inputs:
 
 * A table number
 * A year
@@ -494,6 +495,7 @@ _Decent_ packages that no one but yourself will use are easy enough to develop. 
 * Be open to criticism
 * For managers / directors: please invest in your employees' time to develop own tools
 
+
 # {{< iconify fluent bow-tie-24-regular >}} Thank you! {background-image="images/strings.jpg" background-opacity="0.2"}
 
 ## Thank you! {.larger}
@@ -506,4 +508,4 @@ _Decent_ packages that no one but yourself will use are easy enough to develop. 
 
 {{< iconify fluent data-histogram-24-regular >}} See DataHaven's work: [ctdatahaven.org](https://ctdatahaven.org/)
 
-{{< iconify fluent fork-24-regular >}} Adapt my {`cwi`} package for your area: [{{< iconify fe github-alt >}}/CT-Data-Haven/cwi](https://github.com/CT-Data-Haven/cwi)
+{{< iconify fluent branch-fork-24-regular >}} Adapt my {`cwi`} package for your area: [{{< iconify fe github-alt >}}/CT-Data-Haven/cwi](https://github.com/CT-Data-Haven/cwi)
